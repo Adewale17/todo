@@ -1,0 +1,118 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #eee;
+    margin: 2%;
+    padding: 0;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: auto;
+  }
+  
+  .card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    padding: 6%;
+  }
+  
+  h4 {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  form input[type="text"] {
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    flex: 1;
+  }
+  
+  form button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  form .btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+  }
+  
+  form .btn-primary:hover {
+    background-color: #0056b3;
+  }
+  
+  form .btn-warning {
+    background-color: #ffc107;
+    color: white;
+    border: none;
+  }
+  
+  form .btn-warning:hover {
+    background-color: #e0a800;
+  }
+  
+  .table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    background-color: white;
+  }
+  
+  .table th,
+  .table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .table th {
+    color: #666;
+  }
+  
+  .table tbody tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .btn-danger {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+  }
+  
+  .btn-danger:hover {
+    background-color: #c82333;
+  }
+  
+  .btn-success {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+  }
+  
+  .btn-success:hover {
+    background-color: #218838;
+  }
+  
+  .ms-1 {
+    margin-left: 10px;
+  }
+  
+  
