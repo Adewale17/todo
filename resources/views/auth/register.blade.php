@@ -1,5 +1,5 @@
-@extends('includes.auth-layout')
-@section('contents')
+@extends('includes.layout')
+@section('content')
     <div class="container d-flex align-items-center justify-content-center vh-100">
         <div class="card p-4 shadow-sm w-100" style="max-width: 400px;">
             <h2 class="text-center mb-4">Register</h2>
