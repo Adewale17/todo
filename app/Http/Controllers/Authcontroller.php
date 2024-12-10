@@ -9,11 +9,11 @@ class Authcontroller extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function register()
+    public function showRegisterForm()
     {
         return view('auth.register');
     }
-    public function login()
+    public function showLoginForm()
     {
         return view('auth.login');
     }
