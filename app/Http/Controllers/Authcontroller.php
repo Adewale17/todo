@@ -9,17 +9,6 @@ use Illuminate\Support\Facades\Hash;
 
 class Authcontroller extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function showRegisterForm()
-    {
-        return view('auth.register');
-    }
-    public function showLoginForm()
-    {
-        return view('auth.login');
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -45,10 +34,7 @@ class Authcontroller extends Controller
      */
     public function login(Request $request)
     {
-        if (Auth::check()) {
-            // Redirect to the index page if the user is already logged in
-            return redirect()->route('index');
-        }
+
         $credentials = $request->validate([
             'email'=> 'required|email',
             'password'=>'required'
@@ -67,8 +53,12 @@ class Authcontroller extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function logout(Request $request)
     {
-        //
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('index');
     }
 }
