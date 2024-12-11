@@ -9,13 +9,10 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function task(){
+    public function index(){
         return view('tasks');
     }
-    public function index()
-    {
-        //
-    }
+
 
     /**
      * Show the form for creating a new resource.
