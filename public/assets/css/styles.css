@@ -90,3 +90,6 @@ footer a {
     color: #ffc107;
     text-decoration: none;
 }
+.action-buttons button {
+            margin-right: 1px;
+        }

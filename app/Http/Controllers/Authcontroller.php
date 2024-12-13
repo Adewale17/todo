@@ -42,7 +42,7 @@ class Authcontroller extends Controller
 
         if(Auth::attempt($credentials)){
             $request->session()->regenerate();
-            return redirect()->route('index');
+            return redirect()->route('tasks');
         }
 
         return back()->withErrors(['email'=>'the provided credentials do not match our record']);
