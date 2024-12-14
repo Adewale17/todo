@@ -65,21 +65,35 @@
                 </thead>
                 <tbody id="taskTable">
                     @foreach ($tasks as $task)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $task->title }}</td>
+                            <td>{{ $task->description }}</td>
+                            <td>{{ $task->day_from }}</td>
+                            <td>{{ $task->day_to }}</td>
+                            <td>{{ $task->is_complete ? 'Complete' : 'In Progress' }}</td>
+                            <td class="action-buttons">
+                                <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <form action="{{ route('tasks.destroy', $task->id) }}" method="POST"
+                                    style="display:inline;"
+                                    onsubmit="return confirm('Are you sure you want to delete this task?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
 
-                    <tr>
-                        <td>{{$loop->iteration}}</td>
-                        <td>{{$task->title}}</td>
-                        <td>{{$task->description}}</td>
-                        <td>{{$task->day_from}}</td>
-                        <td>{{$task->day_to}}</td>
-                        <td>{{$task->is_complete? 'Complete': 'In Progress'}}</td>
-                        <td class="action-buttons">
-                            <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <button class="btn btn-danger btn-sm">Delete</button>
-                            <button class="btn btn-success btn-sm">Mark Complete</button>
-                        </td>
-                    </tr>
-
+                                <form action="{{ route('tasks.complete', $task->id) }}" method="POST"
+                                    style="display:inline;">
+                                    @csrf
+                                    @method('PATCH')
+                                    @if ($task->is_complete == false)
+                                        <button type="submit" class="btn btn-success btn-sm">Mark Complete</button>
+                                    @else
+                                        <button type="submit" class="btn btn-success btn-sm" disabled>Complete</button>
+                                    @endif
+                                </form>
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>

@@ -79,6 +79,22 @@ class TaskController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $task = Task::findOrFail($id);
+        if($task->user_id !== Auth::id()){
+            abort(403, 'You are not allowed to perform this action');
+        }
+
+        $task->delete();
+        return redirect()->back()->with('success', 'Task deleted successfully');
+    }
+
+    public function markComplete($id){
+        $task = Task::findOrFail($id);
+        if($task->user_id !== Auth::id()){
+            abort(403, 'You are not allowed to perform this action');
+        }
+
+        $task->update(['is_complete'=>true]);
+        return redirect()->back()->with('sucess', 'Task marked as complete.' );
     }
 }

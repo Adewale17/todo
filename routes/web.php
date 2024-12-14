@@ -19,7 +19,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
     Route::get('/tasks/{id}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
     Route::put('tasks/{id}', [TaskController::class, 'update'])->name('tasks.update');
-    
+    Route::delete('/task/{id}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+    Route::patch('task/{id}/complete', [TaskController::class, 'markComplete'])->name('tasks.complete');
 });
 Route::view('/', 'index')->name('index'); // Index route for logged-in users
 Route::post('/logout', [AuthController::class,'logout'])->name('logout');
