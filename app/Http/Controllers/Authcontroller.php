@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -13,32 +15,21 @@ class Authcontroller extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $validatedData = $request->validate([
-            'name'=> 'required|string|max:255',
-            'email'=>'required|email|string|unique:users',
-            'password'=> 'required|string|min:8|confirmed'
-        ]);
+        $credentials = $request->validate();
+        $user = User::create($credentials);
+        Auth::login($user);
 
-        $user = User::create([
-            'name'=> $validatedData['name'],
-            'email'=> $validatedData['email'],
-            'password' => Hash::make($validatedData['password']),
-        ]);
-        return redirect()->route('login')->with('success', 'Registration Successful, Please log in');
+        return redirect()->route('index');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-
-        $credentials = $request->validate([
-            'email'=> 'required|email',
-            'password'=>'required'
-        ]);
+        $credentials = $request->validate();
 
         if(Auth::attempt($credentials)){
             $request->session()->regenerate();
@@ -57,7 +48,7 @@ class Authcontroller extends Controller
     {
         Auth::logout();
         $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        // $request->session()->regenerateToken();
 
         return redirect()->route('index');
     }

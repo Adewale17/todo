@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Task\StoreRequest;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,22 +20,14 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        $validated = $request->validate([
-            'title'=> 'required|string',
-            'description'=> 'string|nullable',
-            'day_from'=> 'required|date',
-            'day_to'=> 'required|date',
-        ]);
+        $validated = $request->validate();
 
         $tasks = Task::create([
             'user_id'=> Auth::id(),
-            'title'=> $validated['title'],
-            'description'=> $validated['description'],
-            'day_from'=> $validated['day_from'],
-            'day_to'=> $validated['day_to'],
-            'is_complete'=> false
+            'is_complete'=> false,
+            ...$validated
 
         ]);
         return redirect()->back()->with('success', 'Task Added Successfully');
@@ -56,19 +49,14 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StoreRequest $request, string $id)
     {
         $task = Task::findOrfail($id);
         if($task->user_id !== Auth::id()){
             abort(403, 'You are not allowed to perform this action');
         }
 
-        $validated = $request->validate([
-            'title'=> 'required|string',
-            'description'=> 'string|nullable',
-            'day_from'=> 'required|date',
-            'day_to'=> 'required|date',
-        ]);
+        $validated = $request->validate();
 
         $task->update($request->all());
         return redirect()->route('tasks')->with('success', 'Task Updated Successfully');

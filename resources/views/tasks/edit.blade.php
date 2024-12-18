@@ -5,6 +5,8 @@
     {{ session('success') }}
 </div>
 @endif
+@can('update', $task)
+
 
 <form action="{{ route('tasks.update', $task->id) }}" method="POST">
     @csrf
@@ -49,5 +51,6 @@
     </div>
     <button type="submit" id="addTask" name="submit" class="btn btn-primary">Add Task</button>
 </form>
+@endcan
 <br>
 @endsection
