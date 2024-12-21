@@ -1,9 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Authcontroller;
 use App\Http\Controllers\TaskController;
-use App\Models\Task;
+use Illuminate\Support\Facades\Route;
 
 // Routes for unauthenticated users
 Route::group(['middleware' => 'guest'], function () {
@@ -11,6 +10,10 @@ Route::group(['middleware' => 'guest'], function () {
     Route::view('/register', 'auth/register')->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register');
     Route::post('/login', [AuthController::class, 'login'])->name('login');
+    Route::view('/forgot-password', 'auth/forgot-password')->name('password-request');
+    Route::post('/forgot-password', [Authcontroller::class, 'forgotPassword'])->name('password.email');
+    Route::get('/reset-password/{token}', [AuthController::class, 'passwordReset'])->name('password.reset');
+    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 });
 
 // Routes for authenticated users
@@ -23,4 +26,4 @@ Route::group(['middleware' => 'auth'], function () {
     Route::patch('task/{id}/complete', [TaskController::class, 'markComplete'])->name('tasks.complete');
 });
 Route::view('/', 'index')->name('index'); // Index route for logged-in users
-Route::post('/logout', [AuthController::class,'logout'])->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

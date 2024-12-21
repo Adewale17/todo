@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Auth\forgetRequest;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\PasswordRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\resetPassword;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
+use Illuminate\Auth\Events\PasswordReset;
+
+
 
 class Authcontroller extends Controller
 {
@@ -16,28 +24,45 @@ class Authcontroller extends Controller
      * Show the form for creating a new resource.
      */
     public function register(RegisterRequest $request)
-    {
-        $credentials = $request->validate();
-        $user = User::create($credentials);
-        Auth::login($user);
+{
+    // Get validated data
+    $validated = $request->validated();
 
-        return redirect()->route('index');
-    }
+    $user = User::create([
+        'name' => $validated['name'],
+        'email' => $validated['email'],
+        'password' => Hash::make($validated['password']),
+    ]);
+
+
+    Auth::login($user);
+
+    return redirect()->route('index');
+}
+
 
     /**
      * Store a newly created resource in storage.
      */
     public function login(LoginRequest $request)
-    {
-        $credentials = $request->validate();
+{
+    $validated = $request->validated();
 
-        if(Auth::attempt($credentials)){
-            $request->session()->regenerate();
-            return redirect()->route('tasks');
-        }
+    $credentials = [
+        'email' => $validated['email'],
+        'password' => $validated['password'],
+    ];
 
-        return back()->withErrors(['email'=>'the provided credentials do not match our record']);
+    if (Auth::attempt($credentials)) {
+        $request->session()->regenerate();
+
+        return redirect()->route('tasks');
     }
+
+    return back()->withErrors([
+        'email' => 'The provided credentials are incorrect.',
+    ]);
+}
 
 
 
@@ -52,4 +77,46 @@ class Authcontroller extends Controller
 
         return redirect()->route('index');
     }
+
+    Public function forgotPassword(forgetRequest $request){
+        $email = $request->only('email');
+
+       $status = Password::sendResetLink($email);
+
+        return $status === Password::RESET_LINK_SENT
+        ? back()->with(['status' => __($status)])
+        : back()->withErrors(['email' => __($status)]);
+    }
+
+    public function passwordReset (string $token) {
+        return view('auth.reset-password', ['token' => $token]);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|confirmed',
+            'token' => 'required',
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => bcrypt($password), // Using bcrypt to hash the password
+                ])->setRememberToken(Str::random(60));
+
+                $user->save();
+                event(new PasswordReset($user));
+            }
+        );
+
+        if ($status == Password::PASSWORD_RESET) {
+            return redirect()->route('login')->with('status', 'Password has been reset successfully!');
+        } else {
+            return back()->withErrors(['email' => [__($status)]]);
+        }
+    }
+
 }

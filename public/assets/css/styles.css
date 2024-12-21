@@ -93,3 +93,7 @@ footer a {
 .action-buttons button {
             margin-right: 1px;
         }
+a {
+    text-decoration: none;
+    font-size: small;
+}

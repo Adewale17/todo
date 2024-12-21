@@ -22,16 +22,19 @@ class TaskController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        $validated = $request->validate();
+        // Get validated data
+        $validated = $request->validated();
 
-        $tasks = Task::create([
-            'user_id'=> Auth::id(),
-            'is_complete'=> false,
+        // Create the task with the validated data
+        $task = Task::create([
+            'user_id' => Auth::id(),
+            'is_complete' => false,
             ...$validated
-
         ]);
+
         return redirect()->back()->with('success', 'Task Added Successfully');
     }
+
 
     /**
      * Display the specified resource.
@@ -50,17 +53,19 @@ class TaskController extends Controller
      * Update the specified resource in storage.
      */
     public function update(StoreRequest $request, string $id)
-    {
-        $task = Task::findOrfail($id);
-        if($task->user_id !== Auth::id()){
-            abort(403, 'You are not allowed to perform this action');
-        }
+{
+    $task = Task::findOrFail($id);
 
-        $validated = $request->validate();
-
-        $task->update($request->all());
-        return redirect()->route('tasks')->with('success', 'Task Updated Successfully');
+    if ($task->user_id !== Auth::id()) {
+        abort(403, 'You are not allowed to perform this action');
     }
+
+    $validated = $request->validated();
+
+    $task->update($validated);
+
+    return redirect()->route('tasks')->with('success', 'Task Updated Successfully');
+}
 
     /**
      * Remove the specified resource from storage.
