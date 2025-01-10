@@ -56,6 +56,21 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const successMessage = document.getElementById('success-message');
+            if (successMessage) {
+                setTimeout(() => {
+                    successMessage.classList.add('hide');
+                }, 4500); // Start fade-out at 4.5 seconds
+                setTimeout(() => {
+                    successMessage.remove();
+                }, 5000); // Fully remove after 5 seconds
+            }
+        });
+    </script>
 </body>
+
+
 
 </html>

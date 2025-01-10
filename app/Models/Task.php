@@ -12,6 +12,7 @@ class Task extends Model
         'description',
         'day_from',
         'day_to',
+        'start_time',
         'is_complete'
     ];
 
@@ -19,3 +20,5 @@ class Task extends Model
         return $this->belongsTo(User::class);
     }
 }
+
+

@@ -5,7 +5,7 @@
         <div class="container mt-5">
             <h2 class="mb-4 " style="text-align: center">My Tasks</h2>
             @if (session('success'))
-                <div class="alert alert-success">
+                <div id="success-message" class="alert alert-success">
                     {{ session('success') }}
                 </div>
             @endif
@@ -48,6 +48,16 @@
                         @enderror
                     </div>
                 </div>
+                <div class="mb-3">
+                    Start Time<input type="time" id="start_time" name="start_time"
+                        class="form-control @error('start_time') is-invalid @enderror">
+                    <div class="invalid-feedback">
+                        @error('start_time')
+                            {{ $message }}
+                        @enderror
+                    </div>
+                </div>
+
                 <button type="submit" id="addTask" name="submit" class="btn btn-primary">Add Task</button>
             </form>
 
@@ -59,6 +69,7 @@
                         <th>Description</th>
                         <th>From</th>
                         <th>To</th>
+                        <th>Start Time</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -71,6 +82,7 @@
                             <td>{{ $task->description }}</td>
                             <td>{{ $task->day_from }}</td>
                             <td>{{ $task->day_to }}</td>
+                            <td>{{ $task->start_time }}</td>
                             <td>{{ $task->is_complete ? 'Complete' : 'In Progress' }}</td>
                             <td class="action-buttons">
                                 <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-warning btn-sm">Edit</a>
